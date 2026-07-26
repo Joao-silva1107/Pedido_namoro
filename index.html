@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para o Meu Amor ❤️</title>
+    <!-- Canvas Confetti para o efeito final -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .card-container {
+            background: rgba(255, 255, 255, 0.95);
+            width: 100%;
+            max-width: 500px;
+            min-height: 420px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background-color: #ffe0e6;
+            border-radius: 3px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .progress {
+            height: 100%;
+            width: 0%;
+            background-color: #ff4b72;
+            transition: width 0.4s ease;
+        }
+
+        .slide {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        /* Estilo do Coração Grande na Primeira Tela */
+        .big-heart {
+            font-size: 5.5rem;
+            color: #ff4b72;
+            margin-bottom: 15px;
+            animation: pulse 1.2s infinite ease-in-out;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .intro-text {
+            font-size: 1.15rem;
+            color: #ff4b72;
+            font-weight: 600;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        .btn-start {
+            background-color: #ff4b72;
+            color: white;
+            border: none;
+            padding: 15px 45px;
+            font-size: 1.25rem;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(255, 75, 114, 0.4);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-start:hover {
+            background-color: #e03a5f;
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 75, 114, 0.5);
+        }
+
+        .slide p {
+            font-size: 1.15rem;
+            color: #4a4a4a;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .slide h2 {
+            font-size: 1.8rem;
+            color: #ff4b72;
+            margin-bottom: 20px;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            width: 100%;
+            justify-content: center;
+            margin-top: 15px;
+        }
+
+        button {
+            background-color: #ff4b72;
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 75, 114, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #e03a5f;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 75, 114, 0.4);
+        }
+
+        button.secondary {
+            background-color: #f0f0f0;
+            color: #666;
+            box-shadow: none;
+        }
+
+        button.secondary:hover {
+            background-color: #e0e0e0;
+            color: #333;
+        }
+
+        .proposal-buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .btn-yes {
+            background-color: #28a745;
+            color: white;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+            font-size: 1.1rem;
+            padding: 16px 32px;
+            width: 100%;
+            max-width: 320px;
+        }
+
+        .btn-yes:hover {
+            background-color: #218838;
+            transform: scale(1.03);
+            box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+        }
+
+        /* Estilos da Imagem Final */
+        .couple-gif {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: none; /* Inicia escondida */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card-container">
+        <!-- Barra de Progresso -->
+        <div class="progress-bar" id="progressBar">
+            <div class="progress" id="progress"></div>
+        </div>
+
+        <!-- PÁGINA 0: TELA INICIAL -->
+        <div class="slide active">
+            <div class="big-heart" onclick="mudarSlide(1)">❤️</div>
+            <p class="intro-text">Se você quiser fazer a melhor escolha da sua vida clique no botão de iniciar</p>
+            <button class="btn-start" onclick="mudarSlide(1)">INICIAR</button>
+        </div>
+
+        <!-- PÁGINAS COM MENSAGENS (1 a 7) -->
+        <div class="slide">
+            <p>Eu ainda lembro do primeiro dia em que você veio falar comigo. Você mandou aquela mensagem toda tímida, e eu confesso que achei muito engraçadinha (kkkk). Mal sabia eu que aquela conversa tão simples seria o começo da história mais bonita da minha vida.</p>
+        </div>
+
+        <div class="slide">
+            <p>No início, achei que nós seríamos apenas bons amigos. Nunca imaginei que uma simples amizade pudesse se transformar em um amor tão intenso e verdadeiro.</p>
+        </div>
+
+        <div class="slide">
+            <p>Mas, a cada dia que passava, a cada mensagem que chegava no meu celular, você me mostrava um lado seu que me fazia admirar você ainda mais. Sem perceber, fui me encantando por quem você realmente é.</p>
+        </div>
+
+        <div class="slide">
+            <p>Eu me apaixonei por cada pedacinho de você: pela sinceridade com que fala sobre a sua vida, pela sua inteligência, pela sua carinho que sempre demonstra comigo, pelo seu coração enorme e até pelo seu jeitinho estressadinha, que hoje é uma das coisas que mais me faz sorrir. Cada detalhe seu me fez ter ainda mais certeza de que encontrei a mulher que eu sempre sonhei.</p>
+        </div>
+
+        <div class="slide">
+            <p>Você entrou na minha vida justamente quando eu já não acreditava mais no amor. Eu tinha perdido a esperança de encontrar alguém que me completasse, mas você apareceu com esse seu jeitinho doce, carinhoso e único, e me mostrou que eu só estava procurando no lugar errado. Engraçado pensar que o amor da minha vida estava do outro lado do Teams o tempo todo. Quem diria? kkkk</p>
+        </div>
+
+        <div class="slide">
+            <p>Se existe um único obstáculo na nossa história, é a distância. Mas eu nunca enxerguei isso como um motivo para desistir, e sim como um desafio que quero superar ao seu lado. Tenho certeza de que, em breve, vamos acabar com todos esses quilômetros que nos separam e finalmente viver tudo aquilo que sonhamos, juntos.</p>
+        </div>
+
+        <div class="slide">
+            <p>Enquanto esse dia não chega, eu quero dar o primeiro passo para transformar tudo aquilo que já sentimos em algo oficial. Quero marcar este momento como o início de uma nova fase da nossa história, porque tenho certeza de que é ao seu lado que quero construir o meu futuro.</p>
+        </div>
+
+        <!-- PÁGINA 8: O PEDIDO -->
+        <div class="slide">
+            <p>Então, olhando para tudo o que vivemos até aqui e para tudo o que ainda vamos viver, só falta fazer uma pergunta...</p>
+            <h2>Você aceita namorar comigo? ❤️</h2>
+            
+            <div class="proposal-buttons">
+                <button class="btn-yes" onclick="aceitou()">SIM! é sua única opção</button>
+            </div>
+        </div>
+
+        <!-- PÁGINA FINAL (TELA DE SUCESSO) -->
+        <div class="slide" id="finalSlide">
+            <!-- ATENÇÃO: COLOQUE O LINK DO GIF ABAIXO -->
+            <img src="casal.jpg" alt="Casal abraçado" class="couple-gif" id="coupleGif">
+            
+            <h2>Te amo! ❤️</h2>
+            <p>Prometo te fazer a pessoa mais feliz do mundo todos os dias!</p>
+        </div>
+
+        <!-- NAVEGAÇÃO PRINCIPAL -->
+        <div class="nav-buttons" id="navButtons" style="display: none;">
+            <button class="secondary" id="prevBtn" onclick="mudarSlide(-1)">Voltar</button>
+            <button id="nextBtn" onclick="mudarSlide(1)">Avançar ❤️</button>
+        </div>
+    </div>
+
+    <script>
+        let slideAtual = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalTextSlides = 8; 
+        const progressBar = document.getElementById('progressBar');
+        const progress = document.getElementById('progress');
+        const prevBtn = document.getElementById('prevBtn');
+        const navButtons = document.getElementById('navButtons');
+        const coupleGif = document.getElementById('coupleGif');
+
+        function atualizarSlide() {
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[slideAtual].classList.add('active');
+
+            if (slideAtual === 0) {
+                progressBar.style.display = 'none';
+                navButtons.style.display = 'none';
+            } else if (slideAtual >= 1 && slideAtual <= totalTextSlides) {
+                progressBar.style.display = 'block';
+                const porcentagem = (slideAtual / totalTextSlides) * 100;
+                progress.style.width = `${porcentagem}%`;
+
+                if (slideAtual === totalTextSlides) {
+                    navButtons.style.display = 'none';
+                } else {
+                    navButtons.style.display = 'flex';
+                }
+
+                if (slideAtual === 1) {
+                    prevBtn.style.display = 'none';
+                } else {
+                    prevBtn.style.display = 'block';
+                }
+            } else {
+                progressBar.style.display = 'none';
+                navButtons.style.display = 'none';
+            }
+        }
+
+        function mudarSlide(direcao) {
+            slideAtual += direcao;
+            if (slideAtual < 0) slideAtual = 0;
+            if (slideAtual > totalTextSlides) slideAtual = totalTextSlides;
+            atualizarSlide();
+        }
+
+        function aceitou() {
+            // Esconde a tela do pedido
+            slides[totalTextSlides].classList.remove('active');
+            
+            // Mostra a tela final e o GIF
+            document.getElementById('finalSlide').classList.add('active');
+            coupleGif.style.display = 'block';
+            
+            // Lança os confetes
+            confetti({
+                particleCount: 180,
+                spread: 80,
+                origin: { y: 0.6 }
+            });
+        }
+
+        atualizarSlide();
+    </script>
+</body>
+</html>
